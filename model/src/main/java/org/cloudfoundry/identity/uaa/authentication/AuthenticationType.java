@@ -15,7 +15,7 @@
 
 package org.cloudfoundry.identity.uaa.authentication;
 
-import org.springframework.security.access.method.P;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import static org.springframework.util.StringUtils.hasText;
 
@@ -82,6 +82,11 @@ public enum AuthenticationType {
         this.amr = amr;
         this.name = name;
         this.description = description;
+    }
+
+    @JsonValue
+    public String getAMR() {
+        return amr;
     }
 
     public static AuthenticationType fromAMR(String amr) {

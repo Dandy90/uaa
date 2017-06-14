@@ -15,6 +15,7 @@
 
 package org.cloudfoundry.identity.uaa.authentication;
 
+import org.cloudfoundry.identity.uaa.util.JsonUtils;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -32,6 +33,7 @@ import static org.cloudfoundry.identity.uaa.authentication.AuthenticationType.PI
 import static org.cloudfoundry.identity.uaa.authentication.AuthenticationType.PROOF_OF_POSESSION;
 import static org.cloudfoundry.identity.uaa.authentication.AuthenticationType.RETINA;
 import static org.cloudfoundry.identity.uaa.authentication.AuthenticationType.RISK;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.*;
 
 
@@ -65,6 +67,31 @@ public class AuthenticationTypeTest {
         exception.expect(IllegalArgumentException.class);
         exception.expectMessage(amr);
         AuthenticationType.fromAMR(amr);
+    }
+
+    @Test
+    public void testJSON() {
+        AuthenticationTypeHolder holder = new AuthenticationTypeHolder();
+        holder.setType(FACE);
+
+        String json = JsonUtils.writeValueAsString(holder);
+        assertThat(json, containsString("face"));
+
+        AuthenticationTypeHolder deserialized = JsonUtils.readValue(json, AuthenticationTypeHolder.class);
+
+        assertSame(holder.getType(), deserialized.getType());
+    }
+
+    public static class AuthenticationTypeHolder {
+        AuthenticationType type;
+
+        public AuthenticationType getType() {
+            return type;
+        }
+
+        public void setType(AuthenticationType type) {
+            this.type = type;
+        }
     }
 
 }
