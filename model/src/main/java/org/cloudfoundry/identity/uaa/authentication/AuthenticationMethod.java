@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 import static org.springframework.util.StringUtils.hasText;
 
-public enum AuthenticationType {
+public enum AuthenticationMethod {
 
     FACE("face", "Facial recognition", ""),
     FINGERPRINT("fpt", "Fingerprint biometric", ""),
@@ -78,7 +78,7 @@ public enum AuthenticationType {
     private String name;
     private String description;
 
-    AuthenticationType(String amr, String name, String description) {
+    AuthenticationMethod(String amr, String name, String description) {
         this.amr = amr;
         this.name = name;
         this.description = description;
@@ -89,7 +89,7 @@ public enum AuthenticationType {
         return amr;
     }
 
-    public static AuthenticationType fromAMR(String amr) {
+    public static AuthenticationMethod fromAMR(String amr) {
         if (!hasText(amr)) {
             return null;
         }
@@ -109,5 +109,10 @@ public enum AuthenticationType {
             case "retina" : return RETINA;
             default: throw new IllegalArgumentException(amr);
         }
+    }
+
+    @Override
+    public String toString() {
+        return getAMR();
     }
 }
